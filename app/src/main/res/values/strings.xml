@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">filmeapp</string>
+    <string name="assistir">Assistir</string>
+    <string name="t_tulo_do_filme">Título do Filme</string>
+</resources>
