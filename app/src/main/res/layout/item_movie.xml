@@ -2,21 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="10dp">
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <TextView
-        android:id="@+id/tvMovieTitle"
-        android:layout_width="0dp"
+        android:id="@+id/movieTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/t_tulo_do_filme"
+        android:text="@string/movie_title2"
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnWatchMovie"
+    <TextView
+        android:id="@+id/movieDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/assistir" />
+        android:text="@string/movie_description2"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/moviePoster"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/movie_poster2" />
+
+    <Button
+        android:id="@+id/watchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/watch_nowa" />
 </LinearLayout>

@@ -1,50 +1,36 @@
 package com.example.filmeapp
 
-import android.net.Uri
 import android.os.Bundle
-import android.widget.MediaController
-import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.Toast
+import com.example.filmeapp.databinding.ActivityPlayerBinding
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
 
 class PlayerActivity : AppCompatActivity() {
 
-    private lateinit var videoView: VideoView
+    private lateinit var player: ExoPlayer
+    private lateinit var binding: ActivityPlayerBinding // Declaração do binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_player)
 
-        // Inicializa a VideoView do layout
-        videoView = findViewById(R.id.videoView)
+        // Inicializa o ViewBinding
+        binding = ActivityPlayerBinding.inflate(layoutInflater) // Inicializando o binding
+        setContentView(binding.root)
 
-        // Obtém o URL do vídeo passado via Intent
-        val videoUrl = intent.getStringExtra("videoUrl")
+        val playerView = binding.playerView
+        val videoUrl = intent.getStringExtra("videoUrl") ?: return
 
-        if (videoUrl.isNullOrEmpty()) {
-            Toast.makeText(this, "URL de vídeo inválido", Toast.LENGTH_SHORT).show()
-            finish() // Fecha a atividade se a URL for inválida
-            return
+        player = ExoPlayer.Builder(this).build().also { exoPlayer ->
+            playerView.player = exoPlayer  // playerView é vinculado ao layout activity_player.xml
+            val mediaItem = MediaItem.fromUri(videoUrl)
+            exoPlayer.setMediaItem(mediaItem)
+            exoPlayer.prepare()
         }
+    }
 
-        // Configura o URI do vídeo
-        val uri = Uri.parse(videoUrl)
-
-        // Configura o MediaController
-        val mediaController = MediaController(this)
-        mediaController.setAnchorView(videoView)
-        videoView.setMediaController(mediaController)
-
-        // Define o URI do vídeo e inicia a reprodução
-        videoView.setVideoURI(uri)
-        videoView.setOnPreparedListener {
-            videoView.start()
-        }
-
-        // Tratamento de erros de reprodução
-        videoView.setOnErrorListener { _, _, _ ->
-            Toast.makeText(this, "Erro ao reproduzir o vídeo", Toast.LENGTH_SHORT).show()
-            true // Retorna true para indicar que o erro foi tratado
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        player.release()
     }
 }

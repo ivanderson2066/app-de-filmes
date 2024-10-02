@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "723806739287",
+    "firebase_url": "https://app-filmes-19e03-default-rtdb.firebaseio.com",
+    "project_id": "app-filmes-19e03",
+    "storage_bucket": "app-filmes-19e03.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723806739287:android:3022aed6f1563b9d10bc12",
+        "android_client_info": {
+          "package_name": "com.example.filmeapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_CYbXOutn4yDKHViZFt63csk1Mf-SaiM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

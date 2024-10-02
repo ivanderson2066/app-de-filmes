@@ -2,4 +2,11 @@
     <string name="app_name">filmeapp</string>
     <string name="assistir">Assistir</string>
     <string name="t_tulo_do_filme">Título do Filme</string>
+    <string name="movie_description">Movie Description</string>
+    <string name="movie_title">Movie Title</string>
+    <string name="assistir1">Assistir</string>
+    <string name="movie_title2">Movie Title</string>
+    <string name="watch_nowa">Watch Now</string>
+    <string name="movie_poster2">Movie Poster</string>
+    <string name="movie_description2">Movie Description</string>
 </resources>
