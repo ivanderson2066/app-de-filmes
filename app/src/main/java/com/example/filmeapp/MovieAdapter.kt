@@ -30,9 +30,10 @@ class MovieAdapter(private val onClick: (Movie) -> Unit) : RecyclerView.Adapter<
 
     inner class MovieViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
+            // Define o título do filme
             binding.movieTitle.text = movie.title
 
-            // Verifica se o poster_path não é nulo ou vazio
+            // Verifica se o poster_path não é nulo ou vazio e carrega a imagem
             if (movie.poster_path.isNotEmpty()) {
                 Picasso.get().load(movie.poster_path).into(binding.moviePoster)
             } else {
@@ -40,10 +41,13 @@ class MovieAdapter(private val onClick: (Movie) -> Unit) : RecyclerView.Adapter<
                 Picasso.get().load(R.drawable.gato).into(binding.moviePoster)
             }
 
+            // Define a descrição do filme
+            binding.movieDescription.text = movie.description
+
             // Configurar o comportamento de clique no botão "Assistir"
             binding.watchButton.setOnClickListener {
                 onClick(movie)  // Inicia a PlayerActivity
-                }
+            }
         }
     }
 }
