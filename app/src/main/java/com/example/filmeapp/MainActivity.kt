@@ -4,11 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager // Importa o GridLayoutManager
 import com.example.filmeapp.databinding.ActivityMainBinding
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,31 +32,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        binding.recyclerViewMovies.layoutManager = LinearLayoutManager(this)
+        // Configura o GridLayoutManager com 2 colunas
+        binding.recyclerViewMovies.layoutManager = GridLayoutManager(this, 2)
     }
 
     private fun fetchMoviesFromFirestore() {
-        lifecycleScope.launch {
-            db.collection("movies")
-                .get()
-                .addOnSuccessListener { result ->
-                    val movies = result.map { doc -> doc.toObject(Movie::class.java) }
-                    setupAdapter(movies)
-                }
-                .addOnFailureListener { exception ->
-                    Log.e("MainActivity", "Erro ao buscar filmes", exception)
-                    // Mostra uma mensagem de erro para o usuário
-                    binding.errorTextView.text = "Erro ao carregar filmes. Tente novamente."
-                }
-        }
+        db.collection("movies")
+            .get()
+            .addOnSuccessListener { result ->
+                val movies = result.map { doc -> doc.toObject(Movie::class.java) }
+                setupAdapter(movies)
+            }
+            .addOnFailureListener { exception ->
+                Log.e("MainActivity", "Erro ao buscar filmes", exception)
+                binding.errorTextView.text = "Erro ao carregar filmes. Tente novamente."
+            }
     }
 
     private fun setupAdapter(movies: List<Movie>) {
-        // Inicializa o adapter somente quando temos a lista de filmes
+        // Configura o adapter e passa a lista de filmes
         movieAdapter = MovieAdapter { movie ->
-            // Ao clicar no botão "Assistir", inicia a PlayerActivity
-            val intent = Intent(this, PlayerActivity::class.java)
-            intent.putExtra("videoUrl", movie.videoUrl)
+            // Ao clicar no pôster, abre a DetailsActivity para mais informações
+            val intent = Intent(this, MovieDetailsActivity::class.java)
+            intent.putExtra("movie", movie) // Passa o objeto movie
             startActivity(intent)
         }
 

@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate
 class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        // Força o modo claro globalmente
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        // Força o modo escuro globalmente
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
     }
 }

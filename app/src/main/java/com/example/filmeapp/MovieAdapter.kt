@@ -1,6 +1,5 @@
 package com.example.filmeapp
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +10,6 @@ class MovieAdapter(private val onClick: (Movie) -> Unit) : RecyclerView.Adapter<
 
     private var movies: List<Movie> = listOf()
 
-    @SuppressLint("NotifyDataSetChanged")
     fun submitList(movieList: List<Movie>) {
         this.movies = movieList
         notifyDataSetChanged()
@@ -30,23 +28,15 @@ class MovieAdapter(private val onClick: (Movie) -> Unit) : RecyclerView.Adapter<
 
     inner class MovieViewHolder(private val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: Movie) {
-            // Define o título do filme
+            // Exibe o nome do filme
             binding.movieTitle.text = movie.title
 
-            // Verifica se o poster_path não é nulo ou vazio e carrega a imagem
-            if (movie.poster_path.isNotEmpty()) {
-                Picasso.get().load(movie.poster_path).into(binding.moviePoster)
-            } else {
-                // Carrega uma imagem padrão se o poster_path for nulo ou vazio
-                Picasso.get().load(R.drawable.gato).into(binding.moviePoster)
-            }
+            // Carrega o pôster do filme
+            Picasso.get().load(movie.poster_path).into(binding.moviePoster)
 
-            // Define a descrição do filme
-            binding.movieDescription.text = movie.description
-
-            // Configurar o comportamento de clique no botão "Assistir"
-            binding.watchButton.setOnClickListener {
-                onClick(movie)  // Inicia a PlayerActivity
+            // Configura o clique no pôster para abrir a tela de detalhes
+            binding.moviePoster.setOnClickListener {
+                onClick(movie)
             }
         }
     }
