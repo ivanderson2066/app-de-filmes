@@ -3,45 +3,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@android:color/black">
 
+    <!-- Poster do filme -->
     <ImageView
         android:id="@+id/moviePoster"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/poster_placeholder" />
 
+    <!-- Título do filme -->
     <TextView
         android:id="@+id/movieTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:layout_marginTop="8dp"/>
+        android:textColor="@android:color/white"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginTop="12dp"
+        android:text="Título do Filme" />
 
+    <!-- Data de lançamento -->
     <TextView
         android:id="@+id/releaseDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:layout_marginTop="4dp"/>
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="4dp"
+        android:text="Data de Lançamento: 2024" />
 
+    <!-- Descrição do filme -->
     <TextView
         android:id="@+id/movieDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"/>
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="sans-serif"
+        android:lineSpacingExtra="4dp"
+        android:text="Aqui vai a sinopse do filme, descrevendo o enredo principal e outros detalhes importantes..." />
 
+    <!-- Gêneros do filme -->
     <TextView
         android:id="@+id/movieGenres"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"/>
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="8dp"
+        android:text="Gênero: Ação, Aventura, Drama" />
 
+    <!-- Botão Assistir estilizado -->
     <Button
         android:id="@+id/watchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Assistir"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/black"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="24dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif-medium"/>
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.filmeapp
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,8 @@ class MovieAdapter(private val onClick: (Movie) -> Unit) : RecyclerView.Adapter<
 
     private var movies: List<Movie> = listOf()
 
+    // Atualiza a lista de filmes
+    @SuppressLint("NotifyDataSetChanged")
     fun submitList(movieList: List<Movie>) {
         this.movies = movieList
         notifyDataSetChanged()
@@ -31,11 +34,14 @@ class MovieAdapter(private val onClick: (Movie) -> Unit) : RecyclerView.Adapter<
             // Exibe o nome do filme
             binding.movieTitle.text = movie.title
 
-            // Carrega o pôster do filme
-            Picasso.get().load(movie.poster_path).into(binding.moviePoster)
+            // Carrega o pôster do filme com placeholder e error image
+            Picasso.get()
+                .load(movie.poster_path)
+                .placeholder(R.drawable.poster_placeholder) // Imagem padrão enquanto carrega
+                .into(binding.moviePoster)
 
-            // Configura o clique no pôster para abrir a tela de detalhes
-            binding.moviePoster.setOnClickListener {
+            // Configura o clique em todo o item para abrir a tela de detalhes
+            binding.root.setOnClickListener {
                 onClick(movie)
             }
         }

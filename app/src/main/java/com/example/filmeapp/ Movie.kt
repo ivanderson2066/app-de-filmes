@@ -8,7 +8,7 @@ data class Movie(
     val description: String = "",
     val release_date: String = "",
     val poster_path: String = "",
-    val genres: List<String> = listOf(),
+    val genres: List<String> = listOf(), // Gêneros como uma lista de Strings
     val videoUrl: String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
