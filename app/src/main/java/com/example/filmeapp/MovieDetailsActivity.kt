@@ -2,6 +2,7 @@ package com.example.filmeapp
 
 import android.content.Intent
 import android.os.Bundle
+
 import androidx.appcompat.app.AppCompatActivity
 import com.example.filmeapp.databinding.ActivityMovieDetailsBinding
 import com.squareup.picasso.Picasso
@@ -29,6 +30,7 @@ class MovieDetailsActivity : AppCompatActivity() {
             // Carrega a imagem do pôster
             Picasso.get().load(movie.poster_path).into(binding.moviePoster)
 
+            // Exibe os gêneros do filme
             // Exibe os gêneros do filme
             binding.movieGenres.text = "Gêneros: ${movie.genres.joinToString(", ")}"
 
