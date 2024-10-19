@@ -17,4 +17,12 @@
         android:layout_height="match_parent"
         app:use_controller="true"
         app:resize_mode="fit" />
+    <ImageButton
+        android:id="@+id/btnFullscreen"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:adjustViewBounds="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_fullscreen" />
 </RelativeLayout>

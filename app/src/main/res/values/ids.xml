@@ -4,4 +4,6 @@
     <item name="releaseDate" type="id" />
     <item name="watchButton" type="id" />
     <item name="movieDescription" type="id" />
+    <item name="progressBar" type="id" />
+    <item name="player_view" type="id" />
 </resources>

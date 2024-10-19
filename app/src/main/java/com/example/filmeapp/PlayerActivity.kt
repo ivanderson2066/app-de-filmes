@@ -3,6 +3,7 @@ package com.example.filmeapp
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Build
 import android.view.WindowInsets
@@ -26,6 +27,7 @@ class PlayerActivity : AppCompatActivity() {
     private var playbackPosition: Long = 0
     private var playWhenReady: Boolean = true
     private var videoUrl: String? = null
+    private var isFullscreen: Boolean = false
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,24 +43,27 @@ class PlayerActivity : AppCompatActivity() {
         if (savedInstanceState != null) {
             playbackPosition = savedInstanceState.getLong("playbackPosition")
             playWhenReady = savedInstanceState.getBoolean("playWhenReady")
+            isFullscreen = savedInstanceState.getBoolean("isFullscreen", false)
         }
 
         // Oculta a UI do sistema
         hideSystemUi()
         updateResizeMode()
+
+        // Adiciona comportamento ao botão de fullscreen
+        binding.btnFullscreen.setOnClickListener {
+            toggleFullscreen()
+        }
     }
 
-    // Inicializa o ExoPlayer no onStart para otimizar o ciclo de vida
     @OptIn(UnstableApi::class)
     override fun onStart() {
         super.onStart()
-
         if (videoUrl != null) {
             initializePlayer()
         }
     }
 
-    // Método responsável por inicializar o ExoPlayer
     private fun initializePlayer() {
         player = Builder(this).build().apply {
             binding.playerView.player = this
@@ -69,32 +74,23 @@ class PlayerActivity : AppCompatActivity() {
             prepare()
         }
 
-        // Adiciona listener para monitorar eventos de playback
         player.addListener(object : Player.Listener {
             override fun onPlayerError(error: PlaybackException) {
-                // Handle player error
                 Toast.makeText(this@PlayerActivity, "Erro de reprodução: ${error.message}", Toast.LENGTH_SHORT).show()
             }
 
             override fun onPlaybackStateChanged(playbackState: Int) {
                 when (playbackState) {
                     Player.STATE_ENDED -> {
-                        // O vídeo terminou
                         Toast.makeText(this@PlayerActivity, "Vídeo terminado", Toast.LENGTH_SHORT).show()
                     }
-
                     Player.STATE_BUFFERING -> {
-                        // O player está carregando
                         binding.progressBar.visibility = View.VISIBLE
                     }
-
                     Player.STATE_IDLE -> {
-                        // O player está inativo
                         binding.progressBar.visibility = View.GONE
                     }
-
                     Player.STATE_READY -> {
-                        // O player está pronto para reproduzir
                         binding.progressBar.visibility = View.GONE
                     }
                 }
@@ -104,15 +100,12 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun hideSystemUi() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // Para Android 11 (API level 30) e acima
             window.insetsController?.let { controller ->
-                controller.hide(WindowInsets.Type.systemBars() or WindowInsets.Type.navigationBars() or WindowInsets.Type.statusBars())
+                controller.hide(WindowInsets.Type.systemBars())
                 controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             }
         } else {
-            // Para versões anteriores ao Android 11
-            val decorView = window.decorView
-            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -121,7 +114,6 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    // Atualiza o resizeMode dependendo da configuração atual
     @OptIn(UnstableApi::class)
     private fun updateResizeMode() {
         val isPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
@@ -130,6 +122,41 @@ class PlayerActivity : AppCompatActivity() {
         } else {
             AspectRatioFrameLayout.RESIZE_MODE_FILL
         }
+    }
+
+    private fun toggleFullscreen() {
+        if (isFullscreen) {
+            exitFullscreen()
+        } else {
+            enterFullscreen()
+        }
+        isFullscreen = !isFullscreen
+    }
+
+    private fun enterFullscreen() {
+        // Altera a orientação para horizontal
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.hide(WindowInsets.Type.systemBars())
+        } else {
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        }
+        binding.btnFullscreen.setImageResource(R.drawable.ic_fullscreen_exit)
+    }
+
+    private fun exitFullscreen() {
+        // Volta a orientação para o padrão
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.show(WindowInsets.Type.systemBars())
+        } else {
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_VISIBLE)
+        }
+        binding.btnFullscreen.setImageResource(R.drawable.ic_fullscreen)
     }
 
     override fun onPause() {
@@ -154,9 +181,9 @@ class PlayerActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         outState.putLong("playbackPosition", playbackPosition)
         outState.putBoolean("playWhenReady", playWhenReady)
+        outState.putBoolean("isFullscreen", isFullscreen)
     }
 
-    // Libera o player no onStop para liberar recursos
     override fun onStop() {
         super.onStop()
         releasePlayer()
@@ -174,11 +201,16 @@ class PlayerActivity : AppCompatActivity() {
         releasePlayer()
     }
 
-    // Método para lidar com mudanças de configuração
     @OptIn(UnstableApi::class)
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         hideSystemUi()
         updateResizeMode()
+
+        if (isFullscreen) {
+            enterFullscreen()
+        } else {
+            exitFullscreen()
+        }
     }
 }
